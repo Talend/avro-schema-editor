@@ -258,7 +258,7 @@ public class SchemaTreeLabelProviderImpl implements SchemaViewerLabelProvider {
 	public String getToolTipText(AvroNode node) {
 		if (showTooltip()) {
 			AvroNode referencedNode = getReferencedNode(node);
-			if (AttributeUtil.hasDocAttribute(referencedNode)) {
+			if (AttributeUtil.hasDoc(referencedNode)) {
 				return AttributeUtil.getDoc(referencedNode);
 			}
 		}
