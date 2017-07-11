@@ -1,0 +1,15 @@
+.DS_Store
+*.out
+*.outn
+*.orig
+*.origAct
+*~
+*.log
+.epoch
+.metadata/
+bin
+target
+.settings
+build
+Default Project
+

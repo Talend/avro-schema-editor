@@ -1,0 +1,35 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Avro Schema Editor POC
+Bundle-SymbolicName: org.talend.avro.schema.editor;singleton:=true
+Bundle-Version: 0.0.1.qualifier
+Bundle-Activator: org.talend.avro.schema.editor.AvroSchemaEditorActivator
+Bundle-Vendor: Talend SA
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.ui.workbench,
+ org.eclipse.core.expressions;bundle-version="3.4.400",
+ org.eclipse.ui.forms;bundle-version="3.5.200"
+Export-Package: org.talend.avro.schema.editor,
+ org.talend.avro.schema.editor.commands,
+ org.talend.avro.schema.editor.edit,
+ org.talend.avro.schema.editor.edit.handlers,
+ org.talend.avro.schema.editor.handlers,
+ org.talend.avro.schema.editor.io,
+ org.talend.avro.schema.editor.model,
+ org.talend.avro.schema.editor.model.attributes,
+ org.talend.avro.schema.editor.model.attributes.cmd,
+ org.talend.avro.schema.editor.model.attributes.custom,
+ org.talend.avro.schema.editor.model.cmd,
+ org.talend.avro.schema.editor.thumbnail,
+ org.talend.avro.schema.editor.utils,
+ org.talend.avro.schema.editor.viewer,
+ org.talend.avro.schema.editor.viewer.attribute,
+ org.talend.avro.schema.editor.viewer.attribute.ui,
+ org.talend.avro.schema.editor.viewer.handlers
+Bundle-ClassPath: lib/jackson-core-asl-1.9.13.jar,
+ lib/jackson-mapper-asl-1.9.13.jar,
+ lib/avro-1.8.2.jar,
+ lib/slf4j-api-1.7.25.jar,
+ .
+Bundle-ActivationPolicy: lazy

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.talend.avro.schema.editor.feature"
+      label="Talend Avro Schema Editor Feature"
+      version="0.0.1.qualifier"
+      provider-name="Talend SA">
+
+   <description>
+      Graphical Avro Schema Editor.
+   </description>
+
+   <copyright>
+      Talend SA
+   </copyright>
+
+   <license url="https://www.apache.org/licenses/LICENSE-2.0">
+      Apache Software Licence 2.0
+   </license>
+
+   <url>
+      <discovery label="Apache Avro" url="http://avro.apache.org/"/>
+   </url>
+
+   <plugin
+         id="org.talend.avro.schema.editor"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
