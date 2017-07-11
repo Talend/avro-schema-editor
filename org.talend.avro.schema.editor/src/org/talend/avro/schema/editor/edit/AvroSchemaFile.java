@@ -2,8 +2,10 @@ package org.talend.avro.schema.editor.edit;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 import org.talend.avro.schema.editor.log.AvroSchemaLogger;
@@ -38,18 +40,21 @@ public class AvroSchemaFile implements AvroSchema {
 
 	@Override
 	public void setContent(String content) {
+		
 		AvroSchemaLogger.logMsg("Save into file " + file.getName() + " BEGIN", false);
 		
+		FileOutputStream fos = null;
+		OutputStreamWriter osw = null;
 		BufferedWriter bw = null;
-		FileWriter fw = null;
-
+		
 		try {
-
-			fw = new FileWriter(file);
-			bw = new BufferedWriter(fw);
+			
+			fos = new FileOutputStream(file);
+			osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8.name());
+			bw = new BufferedWriter(osw);
 			bw.write(content);
-
-		} catch (IOException e) {
+			
+		} catch (IOException e) {			
 
 			AvroSchemaLogger.logMsg("ERROR " + e.getMessage(), false);
 
@@ -57,11 +62,10 @@ public class AvroSchemaFile implements AvroSchema {
 
 			try {
 
-				if (bw != null)
+				if (bw != null) {
 					bw.close();
-
-				if (fw != null)
-					fw.close();
+				}
+				
 
 			} catch (IOException ex) {
 
@@ -77,8 +81,8 @@ public class AvroSchemaFile implements AvroSchema {
 	protected String getFileContent(File file) {
 		try {
 			byte[] allBytes = Files.readAllBytes(file.toPath());
-			return new String(allBytes);
-		} catch (IOException e1) {
+			return new String(allBytes, StandardCharsets.UTF_8.name());
+		} catch (IOException e) {
 			return null;
 		} 
 	}
