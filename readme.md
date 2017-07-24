@@ -38,6 +38,14 @@ The Avro schema editor is divided in two parts, a left one displaying the schema
 
 ![](https://github.com/Talend/avro-schema-editor/raw/master/images/sample_1.png)
 
+## Full example
+
+You can see below an example of a complex schema using all the kind of Avro elements.
+
+![](https://github.com/Talend/avro-schema-editor/raw/master/images/figure.png)
+
+We use specific icons in order to distinguish the different types of element 
+(e.g. orange icon for a record, green icon for enumeration, dark blue icon for fields, light blue for opional fields, and so on).
 
 ## Customization
 
