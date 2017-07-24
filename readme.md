@@ -47,6 +47,123 @@ You can see below an example of a complex schema using all the kind of Avro elem
 We use specific icons in order to distinguish the different types of element 
 (e.g. orange icon for a record, green icon for enumeration, dark blue icon for fields, light blue for opional fields, and so on).
 
+You can see below the corresponding figure.avsc file. 
+
+    {
+    	"type": "record",
+    	"name": "Figure",
+    	"namespace": "org.example.com",
+    	"fields": [{
+    		"name": "name",
+    		"type": "string"
+    	},
+    	{
+    		"name": "identifier",
+    		"type": "long"
+    	},
+    	{
+    		"name": "date_of_creation",
+    		"type": ["null",
+    		"long",
+    		"string"],
+    		"doc": "Can be defined in two ways: a long (which represents the number of milliseconds since January 1, 1970, 00:00:00 GMT) or a string (DD-MM-YYY format)"
+    	},
+    	{
+    		"name": "origin",
+    		"type": {
+    			"type": "record",
+    			"name": "Point",
+    			"fields": [{
+    				"name": "x",
+    				"type": "float"
+    			},
+    			{
+    				"name": "y",
+    				"type": "float"
+    			}]
+    		}
+    	},
+    	{
+    		"name": "shapes",
+    		"type": {
+    			"type": "array",
+    			"items": {
+    				"type": "record",
+    				"name": "Shape",
+    				"doc": "Define a shape.",
+    				"fields": [{
+    					"name": "name",
+    					"type": ["null",
+    					"string"]
+    				},
+    				{
+    					"name": "type",
+    					"type": [{
+    						"type": "enum",
+    						"name": "ShapeType",
+    						"symbols": ["Circle",
+    						"Triangle",
+    						"Cross",
+    						"Square"]
+    					},
+    					"string"],
+    					"doc": "The type of the shape."
+    				},
+    				{
+    					"name": "anchor",
+    					"type": "Point"
+    				},
+    				{
+    					"name": "width",
+    					"type": "float"
+    				},
+    				{
+    					"name": "height",
+    					"type": "float"
+    				},
+    				{
+    					"name": "angle",
+    					"type": ["null",
+    					"float"]
+    				},
+    				{
+    					"name": "color",
+    					"type": {
+    						"type": "record",
+    						"name": "Color",
+    						"fields": [{
+    							"name": "red",
+    							"type": "int"
+    						},
+    						{
+    							"name": "green",
+    							"type": "int"
+    						},
+    						{
+    							"name": "blue",
+    							"type": "int"
+    						},
+    						{
+    							"name": "alpha",
+    							"type": ["null",
+    							"int"]
+    						}]
+    					}
+    				},
+    				{
+    					"name": "properties",
+    					"type": ["null",
+    					{
+    						"type": "map",
+    						"values": "string"
+    					}]
+    				}]
+    			}
+    		},
+    		"doc": "List of shapes defining the figure."
+    	}]
+    }
+
 ## Customization
 
 To be defined
