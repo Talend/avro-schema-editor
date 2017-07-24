@@ -38,14 +38,35 @@ The Avro schema editor is divided in two parts, a left one displaying the schema
 
 ![](https://github.com/Talend/avro-schema-editor/raw/master/images/sample_1.png)
 
+We use specific icons in order to distinguish the different types of element 
+(e.g. orange icon for a record, green icon for enumeration, dark blue icon for fields, light blue for opional fields, and so on).
+
+The tree label display the name of the elements and their type between brackets 
+(e.g. for record element we display "record" and for fields we usualy display the name of the primitive type).
+
+The schema tree provides a maximum of legible information, but not all the information,
+it is why we have the right part displaying all the information of a selected element.
+
+The attribute viewer displays obviously the standard avro attributes (namespace, name, doc, and so on).
+It displays customized attributes and sometime editing features (as the 'optional' button which allows to set a field as optional).
+
+## Editing features
+
+The use of a tree viewer provides all the standard interactions: selection, drag and drop and so on.
+
+We hace access to editing features by three ways:
+
+1. a bottom toolbar provides the main editing features: add a new element, remove selected elements, move up or down selected elements, make a copy and paste it.
+
+
+
+
 ## Full example
 
 You can see below an example of a complex schema using all the kind of Avro elements.
 
 ![](https://github.com/Talend/avro-schema-editor/raw/master/images/figure.png)
 
-We use specific icons in order to distinguish the different types of element 
-(e.g. orange icon for a record, green icon for enumeration, dark blue icon for fields, light blue for opional fields, and so on).
 
 You can see below the corresponding figure.avsc file. 
 
