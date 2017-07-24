@@ -54,12 +54,25 @@ It displays customized attributes and sometime editing features (as the 'optiona
 
 The use of a tree viewer provides all the standard interactions: selection, drag and drop and so on.
 
-We hace access to editing features by three ways:
+We have access to editing features by three ways:
 
-1. a bottom toolbar provides the main editing features: add a new element, remove selected elements, move up or down selected elements, make a copy and paste it.
+1. a bottom toolbar ![](https://github.com/Talend/avro-schema-editor/raw/master/images/bottom_toolbar.png) provides the main editing features: add a new element, remove selected elements, move up or down selected elements, make a copy and paste it.
 
+2. a richt click on the tree open a popup menu providing the same editing features
 
+3. we can also performs drag and drop of a selected element. The result depends on the kind of the selected and target elements:
+	* for a field, drag and drop allows us to reorder the fields of a record, or to make a copy of a field
+	* for a record, drag and drop offers three options:
+		* we can move the selected record onto a new place in the schema
+		* we can make a copy of this record
+		* we can make a reference on this record. This allows to change the type of the target field. Of course the ref record is exactly the same as the original record.
+		If we edit the original record, the ref record we be automatically updated to take account of the changes.
 
+All the editing features are undoable.
+
+## Advanced features
+
+To be defined
 
 ## Full example
 
