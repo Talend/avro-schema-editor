@@ -36,7 +36,8 @@ To create your first Avro schema, right click in project explorer and select "Ne
 
 The Avro schema editor is divided in two parts, a left one displaying the schema in a tree viewer, and a right one displaying the attributes of the current selected element in the tree.
 
-![](https://github.com/Talend/avro-schema-editor/tree/master/images/sample_1.png)
+![](https://github.com/Talend/avro-schema-editor/raw/master/images/sample_1.png)
+
 
 ## Customization
 
