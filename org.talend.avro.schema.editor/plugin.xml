@@ -117,6 +117,10 @@
             name="Pin Slave Schema Viewer">
       </command>
       <command
+            id="org.talend.avro.schema.editor.viewer.syncMaster"
+            name="Synchronize Master Schema Viewer">
+      </command>
+      <command
             id="org.talend.avro.schema.editor.viewer.navigateToRoot"
             name="Go To Root">
          <commandParameter
@@ -271,6 +275,10 @@
       <handler
             class="org.talend.avro.schema.editor.viewer.handlers.PinSlaveViewerHandler"
             commandId="org.talend.avro.schema.editor.viewer.pinSlave">
+      </handler>
+      <handler
+            class="org.talend.avro.schema.editor.viewer.handlers.SynchronizeMasterViewerHandler"
+            commandId="org.talend.avro.schema.editor.viewer.syncMaster">
       </handler>
       <handler
       		class="org.talend.avro.schema.editor.viewer.handlers.NavigateToRootHandler"
@@ -530,6 +538,13 @@
                label="Pin Slave Schema Viewer"
                style="toggle"
                tooltip="Pin Slave Schema Viewer">
+         </command>
+         <command
+               commandId="org.talend.avro.schema.editor.viewer.syncMaster"
+               icon="icons/synched.gif"
+               label="Synchronize Master Schema Viewer"
+               style="push"
+               tooltip="Synchronize Master Schema Viewer">
          </command>
       </menuContribution>
       <menuContribution
