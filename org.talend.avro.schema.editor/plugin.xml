@@ -62,7 +62,34 @@
                name="context"
                optional="false">
          </commandParameter>
+      </command>
+      <command
+            id="org.talend.avro.schema.editor.viewer.CollapseAll"
+            name="Collapse All">
+         <commandParameter
+               id="org.talend.avro.schema.editor.context"
+               name="context"
+               optional="false">
+         </commandParameter>
       </command>      
+      <command
+            id="org.talend.avro.schema.editor.viewer.ExpandNodeAll"
+            name="Expand Node All">
+         <commandParameter
+               id="org.talend.avro.schema.editor.context"
+               name="context"
+               optional="false">
+         </commandParameter>
+      </command>
+      <command
+            id="org.talend.avro.schema.editor.viewer.CollapseNodeAll"
+            name="Collapse Node All">
+         <commandParameter
+               id="org.talend.avro.schema.editor.context"
+               name="context"
+               optional="false">
+         </commandParameter>
+      </command>
       <command
             id="org.talend.avro.schema.editor.viewer.ShowPreviousNode"
             name="Go to previous node">
@@ -90,6 +117,15 @@
             name="Pin Slave Schema Viewer">
       </command>
       <command
+            id="org.talend.avro.schema.editor.viewer.navigateToRoot"
+            name="Go To Root">
+         <commandParameter
+               id="org.talend.avro.schema.editor.context"
+               name="context"
+               optional="false">
+         </commandParameter>
+      </command>
+      <command
             id="org.talend.avro.schema.editor.viewer.navigateIn"
             name="Go Into">
          <commandParameter
@@ -115,6 +151,10 @@
             id="org.talend.avro.schema.editor.redo"
             name="Redo">
       </command>
+      <command
+            id="org.talend.avro.schema.editor.showRegistry"
+            name="Show Schema Registry View">
+      </command>      
       <command
             id="org.talend.avro.schema.editor.edit.AddElement"
             name="Add">
@@ -175,7 +215,19 @@
       <handler
             class="org.talend.avro.schema.editor.viewer.handlers.ExpandAllHandler"
             commandId="org.talend.avro.schema.editor.viewer.ExpandAll">
-      </handler>      
+      </handler> 
+      <handler
+            class="org.talend.avro.schema.editor.viewer.handlers.CollapseAllHandler"
+            commandId="org.talend.avro.schema.editor.viewer.CollapseAll">
+      </handler>
+      <handler
+            class="org.talend.avro.schema.editor.viewer.handlers.ExpandNodeAllHandler"
+            commandId="org.talend.avro.schema.editor.viewer.ExpandNodeAll">
+      </handler>
+      <handler
+            class="org.talend.avro.schema.editor.viewer.handlers.CollapseNodeAllHandler"
+            commandId="org.talend.avro.schema.editor.viewer.CollapseNodeAll">
+      </handler>
       <handler
             class="org.talend.avro.schema.editor.viewer.handlers.ShowPreviousNodeHandler"
             commandId="org.talend.avro.schema.editor.viewer.ShowPreviousNode">
@@ -221,6 +273,10 @@
             commandId="org.talend.avro.schema.editor.viewer.pinSlave">
       </handler>
       <handler
+      		class="org.talend.avro.schema.editor.viewer.handlers.NavigateToRootHandler"
+            commandId="org.talend.avro.schema.editor.viewer.navigateToRoot">
+      </handler>
+      <handler
       		class="org.talend.avro.schema.editor.viewer.handlers.NavigateInHandler"
             commandId="org.talend.avro.schema.editor.viewer.navigateIn">
       </handler>
@@ -263,6 +319,10 @@
                </test>
             </and>
          </enabledWhen>
+      </handler>
+      <handler
+            class="org.talend.avro.schema.editor.registry.view.ShowSchemaRegistryView"
+            commandId="org.talend.avro.schema.editor.showRegistry">
       </handler>
       <handler
             class="org.talend.avro.schema.editor.edit.handlers.AddElementHandler"
@@ -322,11 +382,22 @@
             allPopups="false"
             locationURI="popup:org.talend.avro.schema.editor.viewer.tree.master?after=Expand Section">
          <command
-               commandId="org.talend.avro.schema.editor.viewer.ExpandAll"
+               commandId="org.talend.avro.schema.editor.viewer.ExpandNodeAll"
                icon="icons/expandall.gif"
-               label="Expand All"
+               label="Expand all children"
                style="push"
-               tooltip="Expand All">
+               tooltip="Expand all children">
+            <parameter
+                  name="org.talend.avro.schema.editor.context"
+                  value="master">
+            </parameter>
+         </command>
+         <command
+               commandId="org.talend.avro.schema.editor.viewer.CollapseNodeAll"
+               icon="icons/collapseall.gif"
+               label="Collapse all children"
+               style="push"
+               tooltip="Collapse all children">
             <parameter
                   name="org.talend.avro.schema.editor.context"
                   value="master">
@@ -363,9 +434,22 @@
             allPopups="false"
             locationURI="popup:org.talend.avro.schema.editor.viewer.tree.slave?after=Expand Section">
          <command
-               commandId="org.talend.avro.schema.editor.viewer.ExpandAll"
-               label="Expand All"
-               style="push">
+               commandId="org.talend.avro.schema.editor.viewer.ExpandNodeAll"
+               icon="icons/expandall.gif"
+               label="Expand all children"
+               style="push"
+               tooltip="Expand all children">
+            <parameter
+                  name="org.talend.avro.schema.editor.context"
+                  value="slave">
+            </parameter>
+         </command>
+         <command
+               commandId="org.talend.avro.schema.editor.viewer.CollapseNodeAll"
+               icon="icons/collapseall.gif"
+               label="Collapse all children"
+               style="push"
+               tooltip="Collapse all children">
             <parameter
                   name="org.talend.avro.schema.editor.context"
                   value="slave">
@@ -379,6 +463,16 @@
                 commandId="org.talend.avro.schema.editor.viewer.ExpandAll"
                 icon="icons/expandall.gif"
                 label="Expand All"
+                style="push">
+             <parameter
+                   name="org.talend.avro.schema.editor.context"
+                   value="master">
+             </parameter>
+          </command>
+          <command
+                commandId="org.talend.avro.schema.editor.viewer.CollapseAll"
+                icon="icons/collapseall.gif"
+                label="Collapse All"
                 style="push">
              <parameter
                    name="org.talend.avro.schema.editor.context"
@@ -441,6 +535,17 @@
       <menuContribution
             allPopups="false"
             locationURI="toolbar:org.talend.avro.schema.editor.viewer.tree.toolbar.navigation.master">
+         <command
+               commandId="org.talend.avro.schema.editor.viewer.navigateToRoot"
+               icon="icons/go_back_to_root.gif"
+               label="Go To Root"
+               style="push"
+               tooltip="Go To Root">
+            <parameter
+                  name="org.talend.avro.schema.editor.context"
+                  value="master">
+            </parameter>            
+         </command>
          <command
                commandId="org.talend.avro.schema.editor.viewer.navigateOut"
                icon="icons/backward_nav.gif"
@@ -640,6 +745,16 @@
                   tooltip="Redo">
             </command>
          </toolbar>
+         <toolbar
+               id="org.talend.avro.schema.editor.showViewsToolbar">
+            <command
+                  commandId="org.talend.avro.schema.editor.showRegistry"
+                  icon="icons/schema_registry.gif"
+                  label="Show Schema Registry View"
+                  style="push"
+                  tooltip="Show Schema Registry View">
+            </command>
+         </toolbar>
       </menuContribution>
       <menuContribution
             allPopups="false"
@@ -709,6 +824,10 @@
       <command
             id="org.talend.avro.schema.editor.debug.ExpandAll"
             name="Expand All">
+      </command>
+      <command
+            id="org.talend.avro.schema.editor.debug.CollapseAll"
+            name="Collapse All">
       </command>
       <command
             id="org.talend.avro.schema.editor.debug.SynchronizeSelectionFromEditor"
@@ -947,6 +1066,7 @@
       <view
             allowMultiple="false"
             class="org.talend.avro.schema.editor.registry.view.SchemaRegistryView"
+            icon="icons/schema_registry.gif"
             id="org.talend.avro.schema.editor.registry.view"
             name="Schema Registry View"
             restorable="true">

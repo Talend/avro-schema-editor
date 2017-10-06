@@ -235,7 +235,7 @@ public class SchemaRegistryView extends ViewPart implements ISelectionProvider {
 			filterButtons[i].setSelection(true);
 			filterButtons[i].setText(type.getDefaultLabel());
 			layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
-			layoutData.widthHint = 90;
+			layoutData.widthHint = 100;
 			filterButtons[i].setLayoutData(layoutData);
 			filterButtons[i].addSelectionListener(new SelectionAdapter() {
 

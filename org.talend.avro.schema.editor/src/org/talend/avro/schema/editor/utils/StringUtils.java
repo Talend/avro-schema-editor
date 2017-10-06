@@ -2,13 +2,15 @@ package org.talend.avro.schema.editor.utils;
 
 import java.util.List;
 
+import org.talend.avro.schema.editor.Defines;
+
 /**
  * Provides some convenient methods around strings.
  * 
  * @author timbault
  *
  */
-public class StringUtils {
+public final class StringUtils {
 
 	/**
 	 * Given a default name and a list of names, this method computes a valid name 
@@ -57,5 +59,16 @@ public class StringUtils {
 	protected static boolean isNull(String str) {
 		return str == null || str.trim().isEmpty();
 	}	
+	
+	public static String removeExtension(String file, String extension) {
+		String ext = extension;
+		if (!extension.startsWith(Defines.DOT)) {
+			ext = Defines.DOT + extension;
+		}
+		if (file.endsWith(ext)) {
+			return file.substring(0, file.length() - ext.length());
+		}
+		return file;
+	}
 	
 }

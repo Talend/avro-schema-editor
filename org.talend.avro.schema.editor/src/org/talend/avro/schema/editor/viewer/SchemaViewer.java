@@ -32,6 +32,7 @@ import org.eclipse.swt.dnd.DragSourceListener;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -41,6 +42,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.ToolBar;
+import org.talend.avro.schema.editor.AvroSchemaEditorActivator;
 import org.talend.avro.schema.editor.context.AvroContext;
 import org.talend.avro.schema.editor.context.AvroEditorContext;
 import org.talend.avro.schema.editor.edit.AvroSchemaEditor;
@@ -113,7 +115,11 @@ public class SchemaViewer implements IPostSelectionProvider, IContextualView {
 	
 	private SchemaViewerContentProvider contentProvider;	
 	
-	private Map<String, Label> toolBarTitles = new HashMap<>();
+	private SchemaViewerLabelProvider labelProvider;
+	
+	private Map<String, Label> toolBarTextLabels = new HashMap<>();
+	
+	private Map<String, Label> toolBarImageLabels = new HashMap<>();
 	
 	private DisplayMode displayMode = DisplayMode.WITHOUT_COLUMNS;	
 	
@@ -424,34 +430,43 @@ public class SchemaViewer implements IPostSelectionProvider, IContextualView {
     }
 
 	protected void updateToolBarTitles(final AvroNode node) {
-		for (Map.Entry<String, Label> entry : toolBarTitles.entrySet()) {
-			Label titleLabel = entry.getValue();
-			if (!titleLabel.isDisposed()) {
-				String toolBarId = entry.getKey();
-				updateToolBarTitle(node, toolBarId, titleLabel);
+		for (Map.Entry<String, Label> entry : toolBarTextLabels.entrySet()) {
+			String toolbarId = entry.getKey();
+			Label imageLabel = toolBarImageLabels.get(toolbarId);
+			Label textLabel = entry.getValue();
+			if (!textLabel.isDisposed() && !imageLabel.isDisposed()) {
+				updateToolBarTitle(node, toolbarId, imageLabel, textLabel);
 			}
 		}
 	}
 	
-	protected void updateToolBarTitle(final AvroNode node, final String toolBarId, final Label titleLabel) {
+	protected void updateToolBarTitle(final AvroNode node, final String toolBarId, final Label imageLabel, final Label textLabel) {
 		UIUtils.runSyncOrAsync(new Runnable() {
 			@Override
 			public void run() {
-				String title = toolBarConfiguration.getTitle(toolBarId, node);
-				titleLabel.setText(title);
-	            GC gc = new GC(titleLabel);
-	            int width = getTextWidth(gc, title);
+				String text = toolBarConfiguration.getTitle(toolBarId, node);
+				if (text == null) {
+					text = labelProvider.getText(node);
+				}
+				Image image = toolBarConfiguration.getImage(toolBarId, node);
+				if (image == null) {
+					image = labelProvider.getImage(node);
+				}				
+				imageLabel.setImage(image);
+				textLabel.setText(text);
+	            GC gc = new GC(textLabel);
+	            int width = getTextWidth(gc, text);
 	            gc.dispose();
 
-	            Point size = titleLabel.getSize();
+	            Point size = textLabel.getSize();
 	            if (size.x < width) {
-	            	titleLabel.setSize(width, CHARACTER_HEIGHT);
+	            	textLabel.setSize(width, CHARACTER_HEIGHT);
 	            	toolbarManagers.get(toolBarId).update(true);
 	            }
 			}
 		});
 	}
-
+	
 	protected final int getTextWidth(GC gc, String str) {
         int size = 0;
         char[] charArrayOfString = str.toCharArray();
@@ -476,16 +491,21 @@ public class SchemaViewer implements IPostSelectionProvider, IContextualView {
 	protected void createToolBarManagerWithTitle(Composite parent, ToolBarConfiguration toolBarConfiguration, String toolBarId) {
 		
 		Composite compo = new Composite(composite, SWT.NONE);
-		GridLayout layout = new GridLayout(2, true);
+		GridLayout layout = new GridLayout(3, false);
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		layout.verticalSpacing = 0;
 		compo.setLayout(layout);
 		compo.setLayoutData(new  GridData(GridData.FILL_HORIZONTAL));
 		
+		Label imageLabel = new Label(compo, SWT.NONE);
+		imageLabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
+		imageLabel.setImage(AvroSchemaEditorActivator.getNoneImage());
+		toolBarImageLabels.put(toolBarId, imageLabel);
+		
 		Label titleLabel = new Label(compo, SWT.NONE);
 		titleLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		toolBarTitles.put(toolBarId, titleLabel);
+		toolBarTextLabels.put(toolBarId, titleLabel);
 		
 		createToolBarManager(compo, toolBarConfiguration, toolBarId);
 	}
@@ -514,9 +534,10 @@ public class SchemaViewer implements IPostSelectionProvider, IContextualView {
 		contentProvider = schemaViewerConfiguration.getContentProvider(editor, context, displayMode);
 		schemaNodeRegistry.setSchemaContentProvider(contentProvider);
 		viewer.setContentProvider(new SchemaViewerTreeContentProviderImpl(nodeConverter));
-		SchemaViewerStyledCellLabelProvider labelProvider = 
-				new SchemaViewerStyledCellLabelProvider(schemaViewerConfiguration.getLabelProvider(editor, context, displayMode), nodeConverter);
-		viewer.setLabelProvider(labelProvider);
+		
+		labelProvider = schemaViewerConfiguration.getLabelProvider(editor, context, displayMode);
+		SchemaViewerStyledCellLabelProvider styledLabelProvider = new SchemaViewerStyledCellLabelProvider(labelProvider, nodeConverter);
+		viewer.setLabelProvider(styledLabelProvider);
 		
 		ColumnViewerToolTipSupport.enableFor(viewer, ToolTip.NO_RECREATE);
 		

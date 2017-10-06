@@ -1,5 +1,8 @@
 package org.talend.avro.schema.editor.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.talend.avro.schema.editor.context.AvroContext;
 import org.talend.avro.schema.editor.model.attributes.AttributeInitializer;
 import org.talend.avro.schema.editor.model.attributes.NodeTypeNameProvider;
@@ -16,6 +19,8 @@ import org.talend.avro.schema.editor.model.attributes.NodeTypeNameProvider;
  */
 public class RootNode extends AvroNodeImpl {
 
+	private Map<String, String> metadata = new HashMap<>();
+	
 	public RootNode(AvroContext context) {
 		super(NodeType.ROOT, context);
 	}
@@ -51,4 +56,16 @@ public class RootNode extends AvroNodeImpl {
 		return visitor.exitRootNode(this);		
 	}
 
+	public void addMetadata(String key, String value) {
+		metadata.put(key, value);
+	}	
+	
+	public String getMetadata(String key) {
+		return metadata.get(key);
+	}
+	
+	public void removeMetadata(String key) {
+		metadata.remove(key);
+	}
+	
 }

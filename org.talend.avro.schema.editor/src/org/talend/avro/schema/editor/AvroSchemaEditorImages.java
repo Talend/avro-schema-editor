@@ -7,6 +7,8 @@ import org.talend.avro.schema.editor.model.NodeType;
 
 public class AvroSchemaEditorImages {
 
+	public static final String NONE = "None"; //$NON-NLS-1$
+	
 	public static final String SYNCHRONIZE_IMAGE = "SynchronizeImage"; //$NON-NLS-1$
 	
 	public static final String INCREASE_TREE_LEVEL_IMAGE = "IncreaseTreeLevelImage"; //$NON-NLS-1$
@@ -51,6 +53,10 @@ public class AvroSchemaEditorImages {
 	
 	public static final String REDO = "redo"; //$NON-NLS-1$
 	
+	public static final String SCHEMA_FILE = "schemaFile"; //$NON-NLS-1$
+	
+	public static final String SCHEMA_REGISTRY = "schemaRegistry"; //$NON-NLS-1$
+	
 	//***********************************************************************************************
 	
 	private static final String ELEM = "elem"; //$NON-NLS-1$
@@ -74,7 +80,7 @@ public class AvroSchemaEditorImages {
 	static {
 		registerDefaultImageDefs(NodeType.ARRAY, NodeType.ENUM, NodeType.FIELD, NodeType.MAP, NodeType.RECORD);
 		registerImageDefs(1, NodeType.ARRAY, NodeType.ENUM, NodeType.FIELD, NodeType.MAP, NodeType.RECORD);
-		registerImageDefs(2, NodeType.ARRAY, NodeType.ENUM, NodeType.FIELD, NodeType.MAP, NodeType.RECORD, NodeType.FIXED, NodeType.PRIMITIVE_TYPE, NodeType.UNION);
+		registerImageDefs(2, NodeType.ARRAY, NodeType.ENUM, NodeType.FIELD, NodeType.MAP, NodeType.RECORD, NodeType.FIXED, NodeType.PRIMITIVE_TYPE, NodeType.UNION, NodeType.ROOT);
 		registerImageDefs(2, OPTIONAL, NodeType.FIELD, NodeType.ARRAY, NodeType.MAP);
 	}
 	

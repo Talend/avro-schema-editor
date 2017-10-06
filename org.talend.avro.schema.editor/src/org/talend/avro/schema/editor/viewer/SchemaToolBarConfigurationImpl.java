@@ -5,7 +5,10 @@ import java.util.StringTokenizer;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.menus.IMenuService;
+import org.talend.avro.schema.editor.AvroSchemaEditorActivator;
+import org.talend.avro.schema.editor.AvroSchemaEditorImages;
 import org.talend.avro.schema.editor.context.AvroContext;
 import org.talend.avro.schema.editor.edit.Notifications;
 import org.talend.avro.schema.editor.edit.actions.AddElementAction;
@@ -16,6 +19,8 @@ import org.talend.avro.schema.editor.edit.actions.PasteElementAction;
 import org.talend.avro.schema.editor.edit.actions.RemoveElementAction;
 import org.talend.avro.schema.editor.edit.services.IEditorServiceProvider;
 import org.talend.avro.schema.editor.model.AvroNode;
+import org.talend.avro.schema.editor.model.Metadata;
+import org.talend.avro.schema.editor.model.RootNode;
 import org.talend.avro.schema.editor.model.cmd.Direction;
 import org.talend.avro.schema.editor.viewer.attribute.AttributeUtil;
 
@@ -102,7 +107,7 @@ public class SchemaToolBarConfigurationImpl implements ToolBarConfiguration {
 			fillEditionToolBar(manager);
 			break;
 		default:
-			populatToolBar(manager, getToolBarId(toolBarKind));
+			populateToolBar(manager, getToolBarId(toolBarKind));
 			break;
 		}
 	}
@@ -133,7 +138,7 @@ public class SchemaToolBarConfigurationImpl implements ToolBarConfiguration {
 		manager.add(action);
 	}
 	
-	protected void populatToolBar(ToolBarManager manager, String toolBarId) {
+	protected void populateToolBar(ToolBarManager manager, String toolBarId) {
 		IMenuService service = serviceProvider.getMenuService();
         service.populateContributionManager(manager, toolBarId);
 	}
@@ -172,11 +177,19 @@ public class SchemaToolBarConfigurationImpl implements ToolBarConfiguration {
 
 	@Override
 	public String getTitle(String toolBarId, AvroNode node) {
-		if (AttributeUtil.hasNameAttribute(node)) {
-			return AttributeUtil.getNameFromAttribute(node);
-		} else {
-			return "Unnamed...";
+		if (node.getType().isRoot()) {
+			RootNode rootNode = (RootNode) node;
+			return rootNode.getMetadata(Metadata.SCHEMA_DESCRIPTION);
 		}
+		return null;
+	}
+
+	@Override
+	public Image getImage(String toolBarId, AvroNode node) {
+		if (node.getType().isRoot()) {
+			return AvroSchemaEditorActivator.getImage(AvroSchemaEditorImages.SCHEMA_FILE);
+		}
+		return null;
 	}	
-	
+
 }

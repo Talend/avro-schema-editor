@@ -9,6 +9,7 @@ import java.util.List;
 import org.apache.avro.Schema;
 import org.apache.avro.Schema.Field;
 import org.apache.avro.Schema.Type;
+import org.talend.avro.schema.editor.Defines;
 import org.talend.avro.schema.editor.context.AvroContext;
 import org.talend.avro.schema.editor.log.AvroSchemaLogger;
 import org.talend.avro.schema.editor.model.ArrayNode;
@@ -17,6 +18,7 @@ import org.talend.avro.schema.editor.model.EnumNode;
 import org.talend.avro.schema.editor.model.FieldNode;
 import org.talend.avro.schema.editor.model.FixedNode;
 import org.talend.avro.schema.editor.model.MapNode;
+import org.talend.avro.schema.editor.model.Metadata;
 import org.talend.avro.schema.editor.model.NodeType;
 import org.talend.avro.schema.editor.model.PrimitiveType;
 import org.talend.avro.schema.editor.model.PrimitiveTypeNode;
@@ -27,6 +29,7 @@ import org.talend.avro.schema.editor.model.RootNode;
 import org.talend.avro.schema.editor.model.UnionNode;
 import org.talend.avro.schema.editor.registry.SchemaRegistry;
 import org.talend.avro.schema.editor.statistics.NodeStats;
+import org.talend.avro.schema.editor.utils.StringUtils;
 import org.talend.avro.schema.editor.viewer.attribute.AttributeUtil;
 
 /**
@@ -98,6 +101,9 @@ public class AvroSchemaParserImpl implements AvroSchemaParser {
 		}
 		
 		rootNode = postParsing(rootNode);
+		
+		String desc = StringUtils.removeExtension(info, Defines.AVSC_FILE_EXTENSION);
+		rootNode.addMetadata(Metadata.SCHEMA_DESCRIPTION, desc);
 		
 		return rootNode;		
 	}

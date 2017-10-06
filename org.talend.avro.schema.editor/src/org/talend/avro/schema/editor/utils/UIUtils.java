@@ -3,6 +3,7 @@ package org.talend.avro.schema.editor.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -19,6 +20,7 @@ import org.eclipse.ui.dialogs.ListDialog;
 import org.talend.avro.schema.editor.edit.AvroSchemaEditor;
 import org.talend.avro.schema.editor.edit.IWithAvroSchemaEditor;
 import org.talend.avro.schema.editor.log.AvroSchemaLogger;
+import org.talend.avro.schema.editor.model.SchemaNode;
 import org.talend.avro.schema.editor.viewer.SchemaViewer;
 
 public final class UIUtils {
@@ -93,6 +95,49 @@ public final class UIUtils {
 		});
     }
  
+    public static void expandAll(final TreeViewer treeViewer, final SchemaNode node) {
+    	BusyIndicator.showWhile(Display.getCurrent(), new Runnable() {				
+			@Override
+			public void run() {
+				try {		
+					treeViewer.getTree().setRedraw(false);					
+					treeViewer.expandToLevel(node, AbstractTreeViewer.ALL_LEVELS);
+				} finally {
+					treeViewer.getTree().setRedraw(true);
+				}
+			}
+		});
+    }
+    
+    public static void collapseAll(final TreeViewer treeViewer, final SchemaNode node) {
+    	BusyIndicator.showWhile(Display.getCurrent(), new Runnable() {				
+			@Override
+			public void run() {
+				try {		
+					treeViewer.getTree().setRedraw(false);
+					treeViewer.collapseToLevel(node, AbstractTreeViewer.ALL_LEVELS);
+				} finally {
+					treeViewer.getTree().setRedraw(true);					
+				}
+			}
+		});
+    }
+    
+    public static void collapseAll(SchemaViewer viewer) {
+    	final TreeViewer treeViewer = viewer.getTreeViewer();
+    	BusyIndicator.showWhile(Display.getCurrent(), new Runnable() {				
+			@Override
+			public void run() {
+				try {		
+					treeViewer.getTree().setRedraw(false);
+					treeViewer.collapseAll();
+				} finally {
+					treeViewer.getTree().setRedraw(true);					
+				}
+			}
+		});
+    }
+    
     public static void refresh(final TreeViewer treeViewer, final String context) {
     	run(treeViewer, new Runnable() {			
 			@Override

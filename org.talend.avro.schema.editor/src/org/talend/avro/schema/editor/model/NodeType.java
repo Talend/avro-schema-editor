@@ -99,6 +99,10 @@ public enum NodeType implements ModelConstants {
 		return ref;
 	}	
 	
+	public boolean isRoot() {
+		return this == ROOT;
+	}
+	
 	public static NodeType getType(String valueStr) {
 		for (NodeType type : values()) {
 			if (type.toString().toLowerCase().equals(valueStr.toLowerCase())) {

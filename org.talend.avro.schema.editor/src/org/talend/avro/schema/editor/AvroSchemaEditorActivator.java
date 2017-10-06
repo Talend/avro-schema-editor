@@ -63,6 +63,7 @@ public class AvroSchemaEditorActivator extends AbstractUIPlugin {
 
 	@Override
     protected void initializeImageRegistry(ImageRegistry registry) {
+		addImage(registry, AvroSchemaEditorImages.NONE, ICONS_PATH + "empty.png");//$NON-NLS-1$
         addImage(registry, AvroSchemaEditorImages.SYNCHRONIZE_IMAGE, ICONS_PATH + "synched.gif");//$NON-NLS-1$
         addImage(registry, AvroSchemaEditorImages.INCREASE_TREE_LEVEL_IMAGE, ICONS_PATH + "inc_tree_level.png");//$NON-NLS-1$
         addImage(registry, AvroSchemaEditorImages.DECREASE_TREE_LEVEL_IMAGE, ICONS_PATH + "dec_tree_level.png");//$NON-NLS-1$
@@ -85,6 +86,8 @@ public class AvroSchemaEditorActivator extends AbstractUIPlugin {
         addImage(registry, AvroSchemaEditorImages.PASTE, ICONS_PATH + "paste.gif"); //$NON-NLS-1$
         addImage(registry, AvroSchemaEditorImages.UNDO, ICONS_PATH + "undo_edit.gif"); //$NON-NLS-1$
         addImage(registry, AvroSchemaEditorImages.REDO, ICONS_PATH + "redo_edit.gif"); //$NON-NLS-1$
+        addImage(registry, AvroSchemaEditorImages.SCHEMA_FILE, ICONS_PATH + "schema_file.gif"); //$NON-NLS-1$
+        addImage(registry, AvroSchemaEditorImages.SCHEMA_REGISTRY, ICONS_PATH + "schema_registry.gif"); //$NON-NLS-1$
         for (NodeType type : NodeType.values()) {
         	for (int i = 0; i < ELEMENT_IMAGE_VERSIONS.length; i++) {
         		int version = ELEMENT_IMAGE_VERSIONS[i];
@@ -127,4 +130,8 @@ public class AvroSchemaEditorActivator extends AbstractUIPlugin {
         return getDefault().getImageRegistry().get(key);
     }
 	
+    public static Image getNoneImage() {
+    	return getImage(AvroSchemaEditorImages.NONE);
+    }
+    
 }

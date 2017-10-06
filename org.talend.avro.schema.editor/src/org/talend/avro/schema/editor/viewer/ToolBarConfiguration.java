@@ -1,6 +1,7 @@
 package org.talend.avro.schema.editor.viewer;
 
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.swt.graphics.Image;
 import org.talend.avro.schema.editor.model.AvroNode;
 
 /**
@@ -59,5 +60,7 @@ public interface ToolBarConfiguration {
 	 * @return
 	 */
 	String getTitle(String toolBarId, AvroNode node);
+	
+	Image getImage(String toolBarId, AvroNode node);
 	
 }

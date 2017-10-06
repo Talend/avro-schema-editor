@@ -11,7 +11,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -26,11 +25,12 @@ import org.eclipse.ui.menus.WorkbenchWindowControlContribution;
 import org.eclipse.ui.services.IEvaluationService;
 import org.talend.avro.schema.editor.context.AvroContext;
 import org.talend.avro.schema.editor.context.SearchNodeContext;
+import org.talend.avro.schema.editor.context.SearchNodeContext.SearchType;
 import org.talend.avro.schema.editor.context.SearchNodePropertyTester;
 import org.talend.avro.schema.editor.edit.AvroSchemaEditor;
 import org.talend.avro.schema.editor.edit.IWithAvroSchemaEditor;
 import org.talend.avro.schema.editor.model.AvroNode;
-import org.talend.avro.schema.editor.model.NodeType;
+
 
 /**
  * This class builds the controls for the search feature.
@@ -45,10 +45,10 @@ public class SearchNodeControl extends WorkbenchWindowControlContribution {
     @Override
     protected Control createControl(Composite parent) {
     	
-    	final NodeType[] selectedType = new NodeType[] { NodeType.RECORD };
+    	final SearchType[] selectedType = new SearchType[] { SearchType.RECORD };
     	
     	Composite compo = new Composite(parent, SWT.NONE);
-        GridLayout layout = new GridLayout(4, false);
+        GridLayout layout = new GridLayout(3, false);
         layout.marginHeight = 0;
         layout.marginWidth = 5;
         compo.setLayout(layout);
@@ -63,11 +63,12 @@ public class SearchNodeControl extends WorkbenchWindowControlContribution {
         layoutData.widthHint = 50;
         combo.setLayoutData(layoutData);
         
-        
+        /*
         final Button refButton = new Button(compo, SWT.CHECK);
         refButton.setText("Ref");
         refButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
-        refButton.setSelection(false);       
+        refButton.setSelection(false);
+        */       
         
         final Text text = new Text(compo, SWT.BORDER);
         layoutData = new GridData(GridData.FILL_HORIZONTAL);
@@ -79,7 +80,7 @@ public class SearchNodeControl extends WorkbenchWindowControlContribution {
             @Override
             public void modifyText(ModifyEvent modifyEvent) {            	                                  	
             	String pattern = text.getText();            	
-            	search(pattern, selectedType[0], refButton.getSelection());                
+            	search(pattern, selectedType[0], true /*refButton.getSelection()*/);                
             }
             
         });      
@@ -90,12 +91,13 @@ public class SearchNodeControl extends WorkbenchWindowControlContribution {
 				int selectedTypeIndex = combo.getSelectionIndex();
             	String[] searchableTypes = getSearchableTypes();
             	String selectedTypeStr = searchableTypes[selectedTypeIndex];
-            	selectedType[0] = NodeType.getType(selectedTypeStr);
+            	selectedType[0] = SearchType.getType(selectedTypeStr);
             	String pattern = text.getText();            	
-            	search(pattern, selectedType[0], refButton.getSelection());         
+            	search(pattern, selectedType[0], true /*refButton.getSelection()*/);         
 			}
 		});
         
+        /*
         refButton.addSelectionListener(new SelectionAdapter() {
         	@Override
         	public void widgetSelected(SelectionEvent e) {
@@ -103,12 +105,13 @@ public class SearchNodeControl extends WorkbenchWindowControlContribution {
         		search(pattern, selectedType[0], refButton.getSelection());              
         	}
 		});
+		*/
         
         return compo;
         
     }
     
-    protected void search(String pattern, NodeType type, boolean withRef) {    	    	
+    protected void search(String pattern, SearchType type, boolean withRef) {    	    	
     	IWorkbench workbench = PlatformUI.getWorkbench();
         IWorkbenchWindow workbenchWindow = workbench.getActiveWorkbenchWindow();
         IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
@@ -140,10 +143,8 @@ public class SearchNodeControl extends WorkbenchWindowControlContribution {
     
     protected String[] getSearchableTypes() {
     	List<String> result = new ArrayList<>();
-    	for (NodeType type : NodeType.values()) {
-    		if (type.hasFullName() && !type.isRef()) {
-    			result.add(type.toString());
-    		}
+    	for (SearchType type : SearchType.values()) {
+    		result.add(type.getLabel());    		
     	}
     	return result.toArray(new String[result.size()]);
     }

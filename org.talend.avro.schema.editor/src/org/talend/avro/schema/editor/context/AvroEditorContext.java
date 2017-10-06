@@ -88,7 +88,7 @@ public class AvroEditorContext implements AvroContext, ISelectionChangedListener
 			this.schemaRegistry = new SchemaRegistry(serviceProvider);	
 			this.schemaNodeRegistry = new SchemaNodeRegistryImpl(schemaRegistry);
 			this.nodeConverter = new SchemaViewerNodeConverter(schemaNodeRegistry);
-			this.searchNodeContext = new SearchNodeContext(schemaRegistry);
+			this.searchNodeContext = new SearchNodeContext(schemaRegistry, this);
 			this.copyContext = new CopyContext();
 		} else {
 			// this is the slave context
@@ -96,7 +96,7 @@ public class AvroEditorContext implements AvroContext, ISelectionChangedListener
 			this.schemaRegistry = masterContext.getSchemaRegistry();
 			this.schemaNodeRegistry = new SchemaNodeRegistryImpl(schemaRegistry);
 			this.nodeConverter = new SchemaViewerNodeConverter(schemaNodeRegistry);
-			this.searchNodeContext = new SearchNodeContext(schemaRegistry);
+			this.searchNodeContext = new SearchNodeContext(schemaRegistry, this);
 			setLinkedContext(masterContext);
 			((AvroEditorContext) masterContext).setLinkedContext(this);
 		}
