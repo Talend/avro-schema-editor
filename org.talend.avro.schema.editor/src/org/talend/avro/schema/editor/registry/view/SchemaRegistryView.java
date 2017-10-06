@@ -110,6 +110,8 @@ public class SchemaRegistryView extends ViewPart implements ISelectionProvider {
 	
 	private TreeViewer treeViewer;
 	
+	private Label nsLabel;
+	
 	private Button[] filterButtons;
 	
 	private boolean[] filters;
@@ -192,11 +194,17 @@ public class SchemaRegistryView extends ViewPart implements ISelectionProvider {
 		composite.setLayout(new GridLayout());
 		
 		Composite topCompo = new Composite(composite, SWT.NONE);		
-		GridLayout layout = new GridLayout(10 + nsTypeSize, false);
+		GridLayout layout = new GridLayout(12 + nsTypeSize, false);
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		topCompo.setLayout(layout);
 		topCompo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		nsLabel = new Label(topCompo, SWT.NONE);
+		nsLabel.setText("   0 namespace(s)");
+		nsLabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
+		
+		addSeparator(topCompo);
 		
 		toolbarMgr = new ToolBarManager(SWT.HORIZONTAL | SWT.FLAT | SWT.BEGINNING);
 				
@@ -1042,6 +1050,7 @@ public class SchemaRegistryView extends ViewPart implements ISelectionProvider {
 	protected void update() {
 		treeViewer.refresh();		
 		updateButtonLabels();
+		updateNSLabel();
 	}
 	
 	protected void updateButtonLabels() {
@@ -1049,6 +1058,15 @@ public class SchemaRegistryView extends ViewPart implements ISelectionProvider {
 			NodeType type = NodeType.NAMESPACED_NODE_TYPES[i];
 			int count = getRegisteredNodeCount(type);
 			filterButtons[i].setText(type.getDefaultLabel() + " [" + count + "]");
+		}
+	}
+	
+	protected void updateNSLabel() {
+		if (schemaRegistry != null) {
+			int nameSpaceCount = schemaRegistry.getNameSpaceRegistry().getNameSpaceCount();
+			nsLabel.setText(nameSpaceCount + " namespace(s)");
+		} else {
+			nsLabel.setText("0 namespace(s)");
 		}
 	}
 	

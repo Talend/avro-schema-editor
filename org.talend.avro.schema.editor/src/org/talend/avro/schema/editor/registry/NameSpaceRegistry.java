@@ -27,6 +27,10 @@ public class NameSpaceRegistry {
 		return rootNSNode;
 	}	
 	
+	public int getNameSpaceCount() {
+		return nameSpaceCounter.size();
+	}
+	
 	public String getAvailableNameSpace(NSNode node) {
 		return getAvailableNSNodeName(node);
 	}
