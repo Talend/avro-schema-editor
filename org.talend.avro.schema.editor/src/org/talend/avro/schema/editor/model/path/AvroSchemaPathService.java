@@ -14,7 +14,7 @@ public class AvroSchemaPathService extends AbstractEditorService implements Path
 
 	private static final String STEP_SEP = "/"; //$NON-NLS-1$
 	
-	private static final String NAME_SEP = ":"; //$NON-NLS-1$
+	private static final String NAME_SEP = "."; //$NON-NLS-1$
 	
 	private static final String ANCHOR = "#"; //$NON-NLS-1$
 	

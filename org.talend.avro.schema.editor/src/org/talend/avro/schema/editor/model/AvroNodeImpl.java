@@ -18,6 +18,8 @@ import org.talend.avro.schema.editor.model.attributes.AvroAttributesImpl;
 import org.talend.avro.schema.editor.model.attributes.BooleanAttribute;
 import org.talend.avro.schema.editor.model.attributes.CustomProperties;
 import org.talend.avro.schema.editor.model.attributes.CustomPropertiesAttribute;
+import org.talend.avro.schema.editor.model.attributes.DefaultValue;
+import org.talend.avro.schema.editor.model.attributes.DefaultValueAttribute;
 import org.talend.avro.schema.editor.model.attributes.DocAttribute;
 import org.talend.avro.schema.editor.model.attributes.IntegerAttribute;
 import org.talend.avro.schema.editor.model.attributes.NameAttribute;
@@ -272,6 +274,12 @@ public abstract class AvroNodeImpl implements AvroNode {
 		DocAttribute docAttribute = new DocAttribute(this);
 		initializeAll(docAttribute, initializer);
 		return docAttribute;
+	}
+	
+	protected final AvroAttribute<DefaultValue> addDefaultValueAttribute(AttributeInitializer initializer) {
+		DefaultValueAttribute defaultValueAttribute = new DefaultValueAttribute(this);
+		initializeAll(defaultValueAttribute, initializer);
+		return defaultValueAttribute;
 	}
 	
 	protected final AvroAttributeImpl<StringList> addAliasesAttribute(AttributeInitializer initializer) {

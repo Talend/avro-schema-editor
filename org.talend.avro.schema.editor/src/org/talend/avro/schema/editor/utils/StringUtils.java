@@ -11,7 +11,7 @@ import org.talend.avro.schema.editor.Defines;
  *
  */
 public final class StringUtils {
-
+	
 	/**
 	 * Given a default name and a list of names, this method computes a valid name 
 	 * 

@@ -1,7 +1,9 @@
 package org.talend.avro.schema.editor.viewer.attribute.ui;
 
 
+import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.talend.avro.schema.editor.commands.ICommandExecutor;
@@ -11,6 +13,8 @@ import org.talend.avro.schema.editor.edit.Notifications;
 import org.talend.avro.schema.editor.model.attributes.AvroAttribute;
 import org.talend.avro.schema.editor.model.attributes.cmd.IAttributeCommandFactory;
 import org.talend.avro.schema.editor.model.attributes.validator.AttributeCommandValidator;
+import org.talend.avro.schema.editor.model.attributes.validator.DefaultInputValidtor;
+import org.talend.avro.schema.editor.model.attributes.validator.InputValidatorProvider;
 import org.talend.avro.schema.editor.viewer.attribute.AttributeControl;
 import org.talend.avro.schema.editor.viewer.attribute.config.AttributeControlConfiguration;
 import org.talend.avro.schema.editor.viewer.attribute.config.AttributeControlConfigurationConstants;
@@ -180,6 +184,40 @@ public abstract class BaseAttributeControl<T> implements AttributeControl<T> {
 			}
 		}
 		return element.toString();
+	}
+	
+	protected int getTextStyle(int initialStyle) {
+		int textStyle = initialStyle;
+		if (hasConfiguration(AttributeControlConfigurations.TEXT_STYLE)) {
+			int textStyleConfig = getConfiguration(AttributeControlConfigurations.TEXT_STYLE, Integer.class);
+			textStyle = textStyle | textStyleConfig;
+		}
+		return textStyle;
+	}
+	
+	protected IInputValidator getInputValidator() {
+		IInputValidator validator = null;
+		if (hasConfiguration(AttributeControlConfigurations.INPUT_VALIDATOR)) {
+			InputValidatorProvider inputValidatorProvider = 
+					getConfiguration(AttributeControlConfigurations.INPUT_VALIDATOR, InputValidatorProvider.class);
+			validator = inputValidatorProvider.getInputValidator(getAttribute().getHolder(), context);
+		}
+		if (validator == null) {
+			validator = new DefaultInputValidtor();
+		}
+		return validator;
+	}
+	
+	/**
+	 * Work only if control has a GridData layout data.
+	 * 
+	 * @param control
+	 * @param visible
+	 */
+	protected void setControlVisible(Control control, boolean visible) {
+		control.setVisible(visible);
+		GridData layoutData = (GridData) control.getLayoutData();
+		layoutData.exclude = !visible;
 	}
 	
 }

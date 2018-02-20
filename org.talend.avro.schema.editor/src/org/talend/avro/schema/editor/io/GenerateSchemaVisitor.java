@@ -32,6 +32,7 @@ import org.talend.avro.schema.editor.io.context.SchemaContext;
 import org.talend.avro.schema.editor.io.context.UnionFinishContext;
 import org.talend.avro.schema.editor.io.context.UnionStartContext;
 import org.talend.avro.schema.editor.io.context.impl.RootContextImpl;
+import org.talend.avro.schema.editor.io.def.DefaultValueUtil;
 import org.talend.avro.schema.editor.model.ArrayNode;
 import org.talend.avro.schema.editor.model.AvroNode;
 import org.talend.avro.schema.editor.model.EnumNode;
@@ -39,7 +40,9 @@ import org.talend.avro.schema.editor.model.FieldNode;
 import org.talend.avro.schema.editor.model.FixedNode;
 import org.talend.avro.schema.editor.model.IAvroNodeVisitor;
 import org.talend.avro.schema.editor.model.MapNode;
+import org.talend.avro.schema.editor.model.ModelUtil;
 import org.talend.avro.schema.editor.model.NodeType;
+import org.talend.avro.schema.editor.model.PrimitiveType;
 import org.talend.avro.schema.editor.model.PrimitiveTypeNode;
 import org.talend.avro.schema.editor.model.RecordNode;
 import org.talend.avro.schema.editor.model.RefNode;
@@ -414,18 +417,49 @@ public class GenerateSchemaVisitor implements IAvroNodeVisitor {
 				exitFixedNode((FixedNode) refNode);
 				break;
 			default:
-				throw new IllegalArgumentException("Invalid referecend node type");
+				throw new IllegalArgumentException("Invalid referenced node type");
 			}
 		}
 		return true;
 	}	
 
 	protected boolean hasDefaultValue(AvroNode node) {
-		return false;
+		return AttributeUtil.hasDefaultValue(node);
 	}
 	
 	protected Object getDefaultValue(AvroNode node) {
-		return null;
+		// node is a field, only field have a default value
+		FieldNode fieldNode = (FieldNode) node;
+		String defaultValue = AttributeUtil.getDefaultValueAsString(fieldNode);
+		NodeType fieldType = ModelUtil.getTypeOfNode(fieldNode);
+		switch (fieldType) {
+		case PRIMITIVE_TYPE:
+			PrimitiveType type = AttributeUtil.getPrimitiveType(fieldNode);
+			return ModelUtil.parsePrimitiveType(defaultValue, type);
+		case RECORD:
+			RecordNode recordNode = (RecordNode) ModelUtil.getFirstChildOfType(fieldNode, false, NodeType.RECORD);
+			return DefaultValueUtil.recordDefaultValue(defaultValue, recordNode);
+		case ARRAY:
+			ArrayNode arrayNode = (ArrayNode) ModelUtil.getFirstChildOfType(fieldNode, false, NodeType.ARRAY);
+			return DefaultValueUtil.arrayDefaultValue(defaultValue, arrayNode);
+		case ENUM:
+			// String
+			return defaultValue;
+		case FIXED:
+			// TODO
+			return defaultValue;
+		case MAP:
+			MapNode mapNode = (MapNode) ModelUtil.getFirstChildOfType(fieldNode, false, NodeType.MAP);
+			return DefaultValueUtil.mapDefaultValue(defaultValue, mapNode);
+		case UNION:
+			// TODO
+			return defaultValue;
+		case REF:
+			// TODO
+			return defaultValue;
+		default:
+			return defaultValue;
+		}		
 	}
 	
 	protected void visitDummyPrimitiveTypeNode(AvroNode node) {

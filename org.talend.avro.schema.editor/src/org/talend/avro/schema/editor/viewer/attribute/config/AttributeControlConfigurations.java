@@ -16,6 +16,7 @@ import org.talend.avro.schema.editor.model.attributes.ArrayOrMapValue;
 import org.talend.avro.schema.editor.model.attributes.AvroAttribute;
 import org.talend.avro.schema.editor.model.attributes.AvroAttributes;
 import org.talend.avro.schema.editor.model.attributes.CustomProperties;
+import org.talend.avro.schema.editor.model.attributes.DefaultValue;
 import org.talend.avro.schema.editor.model.attributes.MultiChoiceValue;
 import org.talend.avro.schema.editor.model.attributes.PrimitiveTypes;
 import org.talend.avro.schema.editor.model.attributes.StringList;
@@ -26,6 +27,7 @@ import org.talend.avro.schema.editor.model.attributes.validator.FixedSizeValidat
 import org.talend.avro.schema.editor.viewer.attribute.AttributeControl;
 import org.talend.avro.schema.editor.viewer.attribute.ui.BooleanAttributeControl;
 import org.talend.avro.schema.editor.viewer.attribute.ui.CustomPropertiesAttributeControl;
+import org.talend.avro.schema.editor.viewer.attribute.ui.DefaultValueAttributeControl;
 import org.talend.avro.schema.editor.viewer.attribute.ui.IntegerAttributeControl;
 import org.talend.avro.schema.editor.viewer.attribute.ui.MultiChoiceAttributeControl;
 import org.talend.avro.schema.editor.viewer.attribute.ui.PathAttributeControl;
@@ -55,6 +57,8 @@ public class AttributeControlConfigurations implements AttributeControlConfigura
 	private int defaultLabelWidth = 120;
 	
 	private int defaultMultiStringWidth = 400;
+	
+	private int defaultMultiStringHeight = 100;
 	
 	private int defaultListHeight = 100;
 	
@@ -98,6 +102,7 @@ public class AttributeControlConfigurations implements AttributeControlConfigura
 		registerDefaultAttributeControlClass(PrimitiveTypes.class, (Class<? extends AttributeControl<?>>) MultiChoiceAttributeControl.class);
 		registerDefaultAttributeControlClass(ArrayOrMapValue.class, (Class<? extends AttributeControl<?>>) MultiChoiceAttributeControl.class);
 		registerDefaultAttributeControlClass(StringList.class, StringListAttributeControl.class);		
+		registerDefaultAttributeControlClass(DefaultValue.class, DefaultValueAttributeControl.class);	
 		registerDefaultAttributeControlClass(CustomProperties.class, CustomPropertiesAttributeControl.class);
 		
 		// named attribute UI classes
@@ -112,7 +117,10 @@ public class AttributeControlConfigurations implements AttributeControlConfigura
 		registerDefaultLayoutData(ArrayOrMapValue.class, createTwoColumnsLayoutData());
 		registerDefaultLayoutData(StringList.class, createLayoutDataForMultiStringAttribute(
 				defaultLabelWidth, defaultMultiStringWidth, defaultListHeight));		
-		registerDefaultLayoutData(CustomProperties.class, createLayoutDataForMultiStringAttribute(defaultLabelWidth, defaultMultiStringWidth, 100));	
+		registerDefaultLayoutData(CustomProperties.class, createLayoutDataForMultiStringAttribute(
+				defaultLabelWidth, defaultMultiStringWidth, defaultMultiStringHeight));	
+		registerDefaultLayoutData(DefaultValue.class, createLayoutDataForMultiStringAttribute(
+				defaultLabelWidth, defaultMultiStringWidth, defaultMultiStringHeight));	
 		
 		// named layout data
 		registerNamedLayoutData(AvroAttributes.NAME, createTwoColumnsLayoutData(defaultLabelWidth));
@@ -127,7 +135,12 @@ public class AttributeControlConfigurations implements AttributeControlConfigura
 		registerDefaultAttributeControlConfigurations(Boolean.class, createAttributeControlConfiguration(LABEL_PROVIDER, getBaseAttributeLabelProvider()));
 		registerDefaultAttributeControlConfigurations(MultiChoiceValue.class, createAttributeControlConfiguration(LABEL_PROVIDER, getBaseAttributeLabelProvider()));
 		registerDefaultAttributeControlConfigurations(CustomProperties.class, createAttributeControlConfiguration(
-				LABEL_PROVIDER, getBaseAttributeLabelProvider()));		
+				LABEL_PROVIDER, getBaseAttributeLabelProvider()));	
+		
+		registerDefaultAttributeControlConfigurations(DefaultValue.class, createAttributeControlConfiguration(
+				LABEL_PROVIDER, getConstantLabelProvider("default value"),
+				TEXT_STYLE, SWT.MULTI | SWT.V_SCROLL | SWT.WRAP
+				));	
 		
 		// named attribute UI configurations
 		
@@ -231,6 +244,15 @@ public class AttributeControlConfigurations implements AttributeControlConfigura
 		}		
 		return configuration;
 	}	
+	
+	protected ILabelProvider getConstantLabelProvider(final String label) {
+		return new LabelProvider() {
+			@Override
+			public String getText(Object element) {
+				return label;
+			} 
+		};
+	}
 	
 	protected ILabelProvider getBaseAttributeLabelProvider() {
 		return new LabelProvider() {

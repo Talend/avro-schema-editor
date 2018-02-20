@@ -6,6 +6,7 @@ import org.apache.avro.Schema;
 import org.apache.avro.Schema.Field;
 import org.apache.avro.Schema.Type;
 import org.talend.avro.schema.editor.context.AvroContext;
+import org.talend.avro.schema.editor.io.def.DefaultValueUtil;
 import org.talend.avro.schema.editor.model.NodeType;
 import org.talend.avro.schema.editor.model.PrimitiveType;
 import org.talend.avro.schema.editor.model.attributes.AbstractAttributeInitializer;
@@ -40,6 +41,8 @@ public class FieldAttributeInitializer extends AbstractAttributeInitializer {
 			return field.name();
 		case AvroAttributes.DOC:
 			return field.doc();
+		case AvroAttributes.DEFAULT:
+			return DefaultValueUtil.createDefaultValue(field);
 		case AvroAttributes.ALIASES:
 			StringList aliases = new StringList();
 			aliases.setValues(field.aliases());

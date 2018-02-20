@@ -6,6 +6,7 @@ import org.talend.avro.schema.editor.model.attributes.AbstractAttributeInitializ
 import org.talend.avro.schema.editor.model.attributes.ArrayOrMapValue;
 import org.talend.avro.schema.editor.model.attributes.AvroAttributes;
 import org.talend.avro.schema.editor.model.attributes.CustomProperties;
+import org.talend.avro.schema.editor.model.attributes.DefaultValue;
 import org.talend.avro.schema.editor.model.attributes.PrimitiveTypes;
 import org.talend.avro.schema.editor.model.attributes.StringList;
 
@@ -34,6 +35,8 @@ public class EditAttributeInitializer extends AbstractAttributeInitializer {
 		case AvroAttributes.ALIASES:
 			StringList aliases = new StringList();			
 			return aliases;
+		case AvroAttributes.DEFAULT:
+			return new DefaultValue();
 		case AvroAttributes.SYMBOLS:
 			StringList symbols = new StringList();			
 			return symbols;

@@ -37,7 +37,7 @@ public class AvroAttributes {
 	
 	public static final String DEFAULT = "default"; //$NON-NLS-1$
 	
-	public static final Class<String> DEFAULT_CLASS = String.class;
+	public static final Class<DefaultValue> DEFAULT_CLASS = DefaultValue.class;
 	
 	public static final String TYPE_PROPERTIES = "type properties"; //$NON-NLS-1$
 	

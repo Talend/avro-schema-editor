@@ -28,6 +28,7 @@ public class FieldNode extends AvroNodeImpl {
 		addPrimitiveTypeAttribute(initializer);
 		addBooleanAttribute(AvroAttributes.OPTIONAL, false, initializer);
 		addAliasesAttribute(initializer);
+		addDefaultValueAttribute(initializer);
 		addCustomPropertiesAttribute(AvroAttributes.CUSTOM_PROPERTIES, initializer);
 		//addCustomPropertiesAttribute(AvroAttributes.TYPE_PROPERTIES, initializer);
 	}

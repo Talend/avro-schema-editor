@@ -34,25 +34,11 @@ public abstract class TextAttributeControl<T> extends BaseAttributeControl<T> {
 		
 		label = toolkit.createLabel(parent, "", SWT.NONE);
 		
-		int textStyle = SWT.BORDER;
-		if (hasConfiguration(AttributeControlConfigurations.TEXT_STYLE)) {
-			int textStyleConfig = getConfiguration(AttributeControlConfigurations.TEXT_STYLE, Integer.class);
-			textStyle = textStyle | textStyleConfig;
-		}
-		
-		text = toolkit.createText(parent, "", textStyle);
+		text = toolkit.createText(parent, "", getTextStyle(SWT.BORDER));
 		
 		update();
 	
-		IInputValidator validator = null;
-		if (hasConfiguration(AttributeControlConfigurations.INPUT_VALIDATOR)) {
-			InputValidatorProvider inputValidatorProvider = 
-					getConfiguration(AttributeControlConfigurations.INPUT_VALIDATOR, InputValidatorProvider.class);
-			validator = inputValidatorProvider.getInputValidator(getAttribute().getHolder(), context);
-		}
-		if (validator == null) {
-			validator = new DefaultInputValidtor();
-		}
+		IInputValidator validator = getInputValidator();
 		
 		IValueChangeListener valueChangeListener = new IValueChangeListener() {
 			

@@ -1,5 +1,6 @@
 package org.talend.avro.schema.editor.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -496,6 +497,95 @@ public class ModelUtil {
 		nodes.add(node);
 		for (AvroNode child : node.getChildren()) {
 			collect(child, nodes);
+		}
+	}
+	
+	/**
+	 * Return all the field names of the given record.
+	 * 
+	 * @param recordNode
+	 * @return
+	 */
+	public static List<String> getFieldNames(RecordNode recordNode) {
+		List<String> names = new ArrayList<>();
+		for (int i = 0; i < recordNode.getChildrenCount(); i++) {
+			AvroNode child = recordNode.getChild(i);
+			String name = AttributeUtil.getNameFromAttribute(child);
+			names.add(name);
+		}
+		return names;
+	}
+	
+	/**
+	 * Return the field of the given record which has the specified name.
+	 *  
+	 * @param recordNode
+	 * @param fieldName
+	 * @return
+	 */
+	public static FieldNode getField(RecordNode recordNode, String fieldName) {
+		for (int i = 0; i < recordNode.getChildrenCount(); i++) {
+			FieldNode fieldNode = (FieldNode) recordNode.getChild(i);
+			if (fieldName.equals(AttributeUtil.getNameFromAttribute(fieldNode))) {
+				return fieldNode;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Return the type of the given node (not the direct type of the node, which is obtained with the getType() method).
+	 * Do not use this method with an union node.
+	 * 
+	 * @param node
+	 * @return
+	 */
+	public static NodeType getTypeOfNode(AvroNode node) {
+		if (node.hasChildren()) {
+			AvroNode child = node.getChild(0);
+			NodeType type = child.getType();
+			// check the special case of union
+			if (type == NodeType.UNION) {
+				if (hasNullChild(child)) {
+					AvroNode firstNotNullChild = getFirstNotNullChild((UnionNode) child);
+					return firstNotNullChild.getType();
+				}
+			}
+			return type;
+		} else {
+			// no child, it is a primitive type
+			return NodeType.PRIMITIVE_TYPE;
+		}
+	}
+	
+	/**
+	 * Parse the given string into a value corresponding to the specified primitive type.
+	 * 
+	 * @param value
+	 * @param type
+	 * @return
+	 */
+	public static Object parsePrimitiveType(String value, PrimitiveType type) {
+		switch (type) {
+		case BOOLEAN:
+			return Boolean.parseBoolean(value);
+		case BYTES:
+			// TODO handle bytes
+			return null;
+		case DOUBLE:
+			return Double.parseDouble(value);
+		case FLOAT:
+			return Float.parseFloat(value);
+		case INT:
+			return Integer.parseInt(value);
+		case LONG:
+			return Long.parseLong(value);
+		case STRING:
+			return value;
+		case NULL:
+			return null;
+		default:
+			return null;
 		}
 	}
 	

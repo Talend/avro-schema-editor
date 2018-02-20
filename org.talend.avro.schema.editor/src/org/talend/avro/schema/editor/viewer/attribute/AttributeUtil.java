@@ -12,6 +12,7 @@ import org.talend.avro.schema.editor.model.RefNode;
 import org.talend.avro.schema.editor.model.attributes.AvroAttribute;
 import org.talend.avro.schema.editor.model.attributes.AvroAttributeSet;
 import org.talend.avro.schema.editor.model.attributes.AvroAttributes;
+import org.talend.avro.schema.editor.model.attributes.DefaultValue;
 import org.talend.avro.schema.editor.model.attributes.NameSpaceDefinition;
 import org.talend.avro.schema.editor.model.attributes.PrimitiveTypeAttribute;
 import org.talend.avro.schema.editor.model.attributes.PrimitiveTypes;
@@ -210,6 +211,25 @@ public class AttributeUtil {
 			return getTrueNameSpace(parentNSNode);
 		}
 		return null;
+	}
+	
+	public static boolean hasDefaultValueAttribute(AvroNode node) {
+		return node.getAttributes().isDefined(AvroAttributes.DEFAULT);
+	}
+	
+	public static boolean hasDefaultValue(AvroNode node) {
+		if (hasDefaultValueAttribute(node)) {
+			return isDefaultValueDefined(node);
+		}
+		return false;
+	}
+	
+	public static boolean isDefaultValueDefined(AvroNode node) {
+		return node.getAttributes().getAttributeFromValueClass(AvroAttributes.DEFAULT, DefaultValue.class).getValue().isDefined();
+	}
+	
+	public static String getDefaultValueAsString(AvroNode node) {
+		return node.getAttributes().getAttributeFromValueClass(AvroAttributes.DEFAULT, DefaultValue.class).getValue().getValue();
 	}
 	
 	public static boolean hasDoc(AvroNode node) {
