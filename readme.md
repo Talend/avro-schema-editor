@@ -36,7 +36,7 @@ To create your first Avro schema, right click in project explorer and select "Ne
 
 The Avro schema editor is divided in two parts, a left one displaying the schema in a tree viewer, and a right one displaying the attributes of the current selected element in the tree.
 
-![](https://github.com/Talend/avro-schema-editor/raw/master/images/sample_1.png)
+![](https://github.com/Talend/avro-schema-editor/raw/master/images/sample.png)
 
 We use specific icons in order to distinguish the different types of element 
 (e.g. orange icon for a record, green icon for enumeration, dark blue icon for fields, light blue for opional fields, and so on).
