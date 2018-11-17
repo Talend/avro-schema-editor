@@ -7,6 +7,11 @@ package org.talend.avro.schema.editor.edit;
  * @see AvroSchemaEditorPart
  */
 public interface AvroSchema {
+	
+	public enum AVRO_SCHEMA_FORMAT {
+		AVSC,
+		JSON
+	}
 
 	/**
 	 * Returns the name of the schema.
@@ -28,5 +33,16 @@ public interface AvroSchema {
 	 * @param content
 	 */
 	void setContent(String content);
+	
+	/**
+	 * Get the schema format
+	 */
+	AVRO_SCHEMA_FORMAT getFormat();
+	
+	/**
+	 * Set the schema format
+	 * @param format
+	 */
+	void setFormat(AVRO_SCHEMA_FORMAT format);
 	
 }

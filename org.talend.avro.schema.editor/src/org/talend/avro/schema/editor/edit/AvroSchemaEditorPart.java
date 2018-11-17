@@ -18,6 +18,7 @@ import org.talend.avro.schema.editor.attributes.AvroSchemaEditorAttributesConfig
 import org.talend.avro.schema.editor.commands.ICommandExecutor;
 import org.talend.avro.schema.editor.commands.ICommandListener;
 import org.talend.avro.schema.editor.commands.IEditCommand;
+import org.talend.avro.schema.editor.edit.AvroSchema.AVRO_SCHEMA_FORMAT;
 import org.talend.avro.schema.editor.edit.services.AvroSchemaEditorConfiguration;
 import org.talend.avro.schema.editor.handlers.UndoRedoPropertyTester;
 import org.talend.avro.schema.editor.model.attributes.custom.AttributesConfigurationLoader;
@@ -136,7 +137,21 @@ public class AvroSchemaEditorPart extends EditorPart implements IDirtyListener, 
 
 	@Override
 	public void doSaveAs() {
-		// not yet implemented
+		/* TODO - upgrade org.eclipse.ui package to support SaveAsDialog
+	    SaveAsDialog saveAsDialog = new SaveAsDialog ( getSite ().getShell () );
+	    saveAsDialog.open ();
+	    IPath path = saveAsDialog.getResult ();
+	    if ( path != null )
+	    {
+	    	if (path.toString().endsWith(".json")) {
+	    		avroSchema.setFormat(AVRO_SCHEMA_FORMAT.JSON);
+	    	}
+	    	else {
+	    		avroSchema.setFormat(AVRO_SCHEMA_FORMAT.AVSC);
+	    	}
+
+	    }*/
+	    editor.save(avroSchema);
 	}
 
 	@Override
@@ -146,7 +161,7 @@ public class AvroSchemaEditorPart extends EditorPart implements IDirtyListener, 
 
 	@Override
 	public boolean isSaveAsAllowed() {
-		return false;
+		return true;
 	}
 
 	@Override

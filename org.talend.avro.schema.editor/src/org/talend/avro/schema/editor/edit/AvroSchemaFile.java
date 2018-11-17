@@ -8,7 +8,21 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
+import org.apache.avro.Schema;
+import com.fasterxml.jackson.databind.JsonNode;
+
 import org.talend.avro.schema.editor.log.AvroSchemaLogger;
+
+import com.github.fge.jackson.JsonLoader;
+import com.github.fge.jsonschema.core.exceptions.ProcessingException;
+import com.github.fge.jsonschema.core.ref.JsonRef;
+import com.github.fge.jsonschema.core.report.ListProcessingReport;
+import com.github.fge.jsonschema.core.report.ProcessingReport;
+import com.github.fge.jsonschema.core.tree.CanonicalSchemaTree;
+import com.github.fge.jsonschema.core.tree.SchemaTree;
+import com.github.fge.jsonschema.core.tree.key.SchemaKey;
+import com.github.fge.jsonschema.core.util.ValueHolder;
+import com.github.fge.jsonschema2avro.AvroWriterProcessor;
 
 /**
  * Implementation of an {@link AvroSchema} which references a File.
@@ -18,14 +32,23 @@ import org.talend.avro.schema.editor.log.AvroSchemaLogger;
  */
 public class AvroSchemaFile implements AvroSchema {
 
+	
 	/**
 	 * A text file containing the schema.
 	 */
+
 	private File file;
+	private AVRO_SCHEMA_FORMAT format;
 
 	public AvroSchemaFile(File file) {
 		super();
 		this.file = file;
+		if (getName().endsWith(".json")) {
+			setFormat(AVRO_SCHEMA_FORMAT.JSON);
+		}
+		else {
+			setFormat(AVRO_SCHEMA_FORMAT.AVSC);
+		}
 	}
 
 	@Override
@@ -36,6 +59,16 @@ public class AvroSchemaFile implements AvroSchema {
 	@Override
 	public String getContent() {
 		return getFileContent(file);
+	}
+	
+	@Override
+	public AVRO_SCHEMA_FORMAT getFormat() {
+		return format;
+	}
+
+	@Override
+	public void setFormat(AVRO_SCHEMA_FORMAT format) {
+		this.format = format;
 	}
 
 	@Override
@@ -52,12 +85,20 @@ public class AvroSchemaFile implements AvroSchema {
 			fos = new FileOutputStream(file);
 			osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8.name());
 			bw = new BufferedWriter(osw);
-			bw.write(content);
+			if (getFormat() == AVRO_SCHEMA_FORMAT.JSON) {
+				bw.write(AvroSchemaText.ConvertAvscToJson(content));
+			}
+			else {
+				bw.write(content);
+			}
+			
 			
 		} catch (IOException e) {			
 
 			AvroSchemaLogger.logMsg("ERROR " + e.getMessage(), false);
 
+		} catch (ProcessingException e) {
+			AvroSchemaLogger.logMsg("ERROR " + e.getMessage(), false);
 		} finally {
 
 			try {
@@ -79,12 +120,20 @@ public class AvroSchemaFile implements AvroSchema {
 	}
 	
 	protected String getFileContent(File file) {
+		AvroSchemaLogger.logMsg("getFileContent is called on " + file.getName(), false);
 		try {
 			byte[] allBytes = Files.readAllBytes(file.toPath());
-			return new String(allBytes, StandardCharsets.UTF_8.name());
-		} catch (IOException e) {
+			String content = new String(allBytes, StandardCharsets.UTF_8.name());
+			if (getFormat() == AVRO_SCHEMA_FORMAT.JSON) {
+				return AvroSchemaText.ConvertJsonToAvsc(content);
+			}
+			return content;
+		}catch (ProcessingException e) {
+			AvroSchemaLogger.logMsg("ProcessingException: " + e.getMessage(), false);
+			return null;
+		}catch (IOException e) {
+			AvroSchemaLogger.logMsg("IOException: " + e.getMessage(), false);
 			return null;
 		} 
-	}
-	
+	}	
 }
